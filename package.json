@@ -1,0 +1,11 @@
+{
+  "name": "todo-autofix",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -r --parallel run dev",
+    "test": "pnpm -r run test"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

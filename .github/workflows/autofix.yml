@@ -1,0 +1,11 @@
+name: Autofix
+
+on:
+  repository_dispatch:
+    types: [frontend-error]
+
+jobs:
+  print-payload:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo '${{ toJSON(github.event.client_payload) }}'
