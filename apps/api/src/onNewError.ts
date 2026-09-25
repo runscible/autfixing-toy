@@ -1,8 +1,25 @@
+import type Database from "better-sqlite3";
 import type { SentryEvent } from "./types.js";
+import { reportErrorToGithub } from "./github.js";
 
-// TODO: create a GitHub issue for this fingerprint and trigger a
-// repository_dispatch (type: frontend-error) with the event as client_payload
-// so the autofix workflow can pick it up.
-export function onNewError(event: SentryEvent): void {
-  console.log("[onNewError] new error fingerprinted:", event.message ?? event.exception?.values?.[0]?.value);
+export async function onNewError(
+  db: Database.Database,
+  fingerprint: string,
+  event: SentryEvent,
+): Promise<void> {
+  console.log(
+    "[onNewError] new error fingerprinted:",
+    event.exception?.values?.[0]?.value ?? event.message,
+  );
+
+  try {
+    const issueNumber = await reportErrorToGithub(event, fingerprint);
+    if (issueNumber !== null) {
+      db.prepare(
+        "UPDATE error_events SET github_issue_number = ? WHERE fingerprint = ?",
+      ).run(issueNumber, fingerprint);
+    }
+  } catch (err) {
+    console.error("[onNewError] failed to report error to GitHub:", err);
+  }
 }

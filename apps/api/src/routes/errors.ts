@@ -26,7 +26,7 @@ export function registerErrorRoutes(app: FastifyInstance, db: Database.Database)
       db.prepare(
         "INSERT INTO error_events (fingerprint, message, payload) VALUES (?, ?, ?)",
       ).run(fingerprint, message, payload);
-      onNewError(event);
+      void onNewError(db, fingerprint, event);
     }
   });
 }

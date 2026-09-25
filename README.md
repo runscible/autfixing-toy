@@ -56,6 +56,14 @@ urgency" with a couple of description-less tasks and enjoy the
 end, deduplicated by fingerprint, patiently waiting for a robot to fix it
 someday so nobody has to read a stack trace on a Saturday night.
 
+## Reporting to GitHub (optional)
+
+Once an error is fingerprinted for the first time, `onNewError` will open a
+GitHub issue and fire the `repository_dispatch` the workflow listens for —
+but only if it knows where to send it. Copy `apps/api/.env.example` to
+`apps/api/.env` and fill in `GITHUB_TOKEN` and `GITHUB_REPOSITORY`. Without
+that file, everything above still works — GitHub reporting is just skipped
+with a log line instead.
 
 ## Tests
 
