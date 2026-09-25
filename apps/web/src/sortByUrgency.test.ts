@@ -38,6 +38,17 @@ describe("sortByUrgency", () => {
     expect(sorted[0]!.id).toBe(1);
   });
 
+  it("treats a null description as not urgent", () => {
+    const todos = [
+      makeTodo({ id: 1, description: null }),
+      makeTodo({ id: 2, description: "this is urgente" }),
+    ];
+
+    const sorted = sortByUrgency(todos);
+
+    expect(sorted[0]!.id).toBe(2);
+  });
+
   it("does not mutate the original array", () => {
     const todos = [
       makeTodo({ id: 1, description: "chill" }),
